@@ -5,7 +5,9 @@
 compile:
 	javac source/DotFileEnumerator/DotFileEnumerator.java
 	javac source/DotLangParser/DotLangParser.java
+	javac source/DotLangParser/DotLangParserGraphType.java
 	javac source/DotLangParser/DotLangParserObj.java
+	javac source/DotLangParser/DotLangParserObjNode.java
 	javac source/Manager.java
 
 run:

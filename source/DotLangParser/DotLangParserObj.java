@@ -1,24 +1,38 @@
 package source.DotLangParser;
 
+import java.util.LinkedList;
+
 public class DotLangParserObj
 {
     public final String fileName;
-    public String contents;
 
-    private String[] attributes;
-    private String nodeLabel;
-
+    private String contents;
+    private LinkedList<DotLangParserObjNode> nodeList;
     private DotLangParserGraphType graphType;
 
     public DotLangParserObj(String fileName, String contents)
     {
         this.fileName = fileName;
         this.contents = contents;
+        nodeList = new LinkedList<DotLangParserObjNode>();
     }
 
     public DotLangParserObj(String fileName)
     {
         this.fileName = fileName;
+        this.contents = "";
+        nodeList = new LinkedList<DotLangParserObjNode>();
+    }
+
+    /**
+     * Adds a line to the objects contents.
+     *
+     * @param line - Line to add.
+     */
+    public void add(String line)
+    {
+        contents += line + "%";
+        contents.replaceAll(" ", "");
     }
 
     /**************************************************************************/
@@ -30,19 +44,17 @@ public class DotLangParserObj
         return fileName;
     }
 
-    public String getContents()
+    public String getContents(boolean prettyPrint)
     {
-        return contents;
-    }
+        String output;
 
-    public String[] getAttributes()
-    {
-        return attributes;
-    }
+        if (prettyPrint) {
+            output = contents.replaceAll("%", "\n");
+        } else {
+            output = contents;
+        }
 
-    public String getNodeLabel()
-    {
-        return nodeLabel;
+        return output;
     }
 
     public DotLangParserGraphType getGraphType()
@@ -50,19 +62,14 @@ public class DotLangParserObj
         return graphType;
     }
 
+    public LinkedList<DotLangParserObjNode> getNodeList()
+    {
+        return nodeList;
+    }
+
     public void setContents(String contents)
     {
         this.contents = contents;
-    }
-
-    public void setAttributes(String[] attributes)
-    {
-        this.attributes = attributes;
-    }
-
-    public void setNodeLabel(String nodeLabel)
-    {
-        this.nodeLabel = nodeLabel;
     }
 
     public void setGraphType(DotLangParserGraphType graphType)
