@@ -1,12 +1,12 @@
-package source.DotLangParser;
+package source.DotGraphParser;
 
-public class DotLangParserObjNode
+public class GraphNodeContainer
 {
     private String nodeName;
     private String attributeString;
     private String[] attributes;
 
-    public DotLangParserObjNode()
+    public GraphNodeContainer()
     {
         nodeName = "";
         attributeString = "";

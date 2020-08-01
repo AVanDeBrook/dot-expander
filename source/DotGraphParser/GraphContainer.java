@@ -1,15 +1,15 @@
-package source.DotLangParser;
+package source.DotGraphParser;
 
 import java.util.LinkedList;
 
-public class DotLangParserObj
+public class GraphContainer
 {
     public final String fileName;
     public String graphName;
 
     private String contents;
-    private LinkedList<DotLangParserObjNode> nodeList;
-    private DotLangParserGraphType graphType;
+    private LinkedList<GraphNodeContainer> nodeList;
+    private DotGraphType graphType;
 
     /**
      * File-name and content constructor.
@@ -17,11 +17,11 @@ public class DotLangParserObj
      * @param fileName - name of the file.
      * @param contents - content of the file.
      */
-    public DotLangParserObj(String fileName, String contents)
+    public GraphContainer(String fileName, String contents)
     {
         this.fileName = fileName;
         this.contents = contents;
-        nodeList = new LinkedList<DotLangParserObjNode>();
+        nodeList = new LinkedList<GraphNodeContainer>();
     }
 
     /**
@@ -29,11 +29,11 @@ public class DotLangParserObj
      *
      * @param fileName - name of the file.
      */
-    public DotLangParserObj(String fileName)
+    public GraphContainer(String fileName)
     {
         this.fileName = fileName;
         this.contents = "";
-        nodeList = new LinkedList<DotLangParserObjNode>();
+        nodeList = new LinkedList<GraphNodeContainer>();
     }
 
     /**
@@ -69,12 +69,12 @@ public class DotLangParserObj
         return output;
     }
 
-    public DotLangParserGraphType getGraphType()
+    public DotGraphType getGraphType()
     {
         return graphType;
     }
 
-    public LinkedList<DotLangParserObjNode> getNodeList()
+    public LinkedList<GraphNodeContainer> getNodeList()
     {
         return nodeList;
     }
@@ -84,7 +84,7 @@ public class DotLangParserObj
         this.contents = contents;
     }
 
-    public void setGraphType(DotLangParserGraphType graphType)
+    public void setGraphType(DotGraphType graphType)
     {
         this.graphType = graphType;
     }
@@ -94,7 +94,7 @@ public class DotLangParserObj
     {
         String output = "";
 
-        for (DotLangParserObjNode n : nodeList) {
+        for (GraphNodeContainer n : nodeList) {
             output += n.toString();
         }
 

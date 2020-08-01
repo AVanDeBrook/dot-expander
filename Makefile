@@ -3,21 +3,21 @@
 .PHONY: clean
 
 compile:
-	javac source/ConfigBuilder/ConfigBuilder.java
+	javac source/Configuration/Configuration.java
 	javac source/DotFileEnumerator/DotFileEnumerator.java
 	javac source/DotFileWriter/DotFileWriter.java
-	javac source/DotLangParser/DotLangParser.java
-	javac source/DotLangParser/DotLangParserGraphType.java
-	javac source/DotLangParser/DotLangParserObj.java
-	javac source/DotLangParser/DotLangParserObjNode.java
+	javac source/DotGraphParser/DotGraphParser.java
+	javac source/DotGraphParser/DotGraphType.java
+	javac source/DotGraphParser/GraphContainer.java
+	javac source/DotGraphParser/GraphNodeContainer.java
 	javac source/Manager.java
 
 run:
 	java source.Manager test
 
 clean:
-	del source\ConfigBuilder\*.class
+	del source\Configuration\*.class
 	del source\DotFileEnumerator\*.class
 	del source\DotFileWriter\*.class
-	del source\DotLangParser\*.class
+	del source\DotGraphParser\*.class
 	del source\*.class

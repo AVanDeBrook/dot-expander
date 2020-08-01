@@ -1,4 +1,4 @@
-package source.DotLangParser;
+package source.DotGraphParser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,11 +6,11 @@ import java.util.LinkedList;
 
 import source.DotFileEnumerator.DotFileEnumerator;
 
-public class DotLangParser
+public class DotGraphParser
 {
     private BufferedReader reader;
     private LinkedList<String> fileList;
-    private LinkedList<DotLangParserObj> parsedData;
+    private LinkedList<GraphContainer> parsedData;
 
     /**
      * Constructor. Requires a DotFileEnumerator object to get the list of files
@@ -18,10 +18,10 @@ public class DotLangParser
      *
      * @param files - Object containing enumerated files
      */
-    public DotLangParser(DotFileEnumerator files)
+    public DotGraphParser(DotFileEnumerator files)
     {
         fileList = files.getFileList();
-        parsedData = new LinkedList<DotLangParserObj>();
+        parsedData = new LinkedList<GraphContainer>();
     }
 
     /**
@@ -30,11 +30,11 @@ public class DotLangParser
      * @throws Exception - When a file is not a ".dot" file.
      * @return - List of graph objects.
      */
-    public LinkedList<DotLangParserObj> parse() throws Exception
+    public LinkedList<GraphContainer> parse() throws Exception
     {
         if (checkFiles()) {
             readFiles();
-            for (DotLangParserObj dotObj : parsedData) {
+            for (GraphContainer dotObj : parsedData) {
                 parseAttributes(dotObj);
                 // Comment/Uncomment for debugging
                 // for (DotLangParserObjNode n : dotObj.getNodeList()) {
@@ -54,12 +54,12 @@ public class DotLangParser
      */
     private void readFiles()
     {
-        DotLangParserObj tempData;
+        GraphContainer tempData;
         String line;
         try {
             for (String file : fileList) {
                 reader = new BufferedReader(new FileReader(file));
-                tempData = new DotLangParserObj(file);
+                tempData = new GraphContainer(file);
 
                 while ((line = reader.readLine()) != null) {
                     if (!line.contains("->")) {
@@ -87,16 +87,16 @@ public class DotLangParser
      *
      * @param graphObject - Data structure of the individual file to parse.
      */
-    private void parseAttributes(DotLangParserObj graphObject)
+    private void parseAttributes(GraphContainer graphObject)
     {
         String tempString;
         String[] contents = graphObject.getContents(false).split("%");
-        DotLangParserObjNode tempNode = new DotLangParserObjNode();
+        GraphNodeContainer tempNode = new GraphNodeContainer();
 
         if (graphObject.getContents(false).contains("digraph")) {
-            graphObject.setGraphType(DotLangParserGraphType.DIGRAPH);
+            graphObject.setGraphType(DotGraphType.DIGRAPH);
         } else {
-            graphObject.setGraphType(DotLangParserGraphType.UDIGRAPH);
+            graphObject.setGraphType(DotGraphType.UDIGRAPH);
         }
 
         for (String s : contents) {
@@ -137,7 +137,7 @@ public class DotLangParser
         return fileList;
     }
 
-    public LinkedList<DotLangParserObj> getParsedData()
+    public LinkedList<GraphContainer> getParsedData()
     {
         return parsedData;
     }
@@ -147,7 +147,7 @@ public class DotLangParser
         this.fileList = fileList;
     }
 
-    public void setParsedData(LinkedList<DotLangParserObj> parsedData)
+    public void setParsedData(LinkedList<GraphContainer> parsedData)
     {
         this.parsedData = parsedData;
     }

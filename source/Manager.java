@@ -2,20 +2,19 @@ package source;
 
 import java.util.LinkedList;
 
-import source.DotFileEnumerator.DotFileEnumerator;
-import source.DotLangParser.DotLangParser;
-import source.DotLangParser.DotLangParserObj;
+import source.DotFileEnumerator.*;
+import source.DotGraphParser.*;
 
 public class Manager
 {
     public static void main(String[] args)
     {
-        DotLangParser parser;
-        LinkedList<DotLangParserObj> list;
+        DotGraphParser parser;
+        LinkedList<GraphContainer> list;
         try {
-            parser = new DotLangParser(new DotFileEnumerator(args[0]));
+            parser = new DotGraphParser(new DotFileEnumerator(args[0]));
             list = parser.parse();
-            for (DotLangParserObj o : list) {
+            for (GraphContainer o : list) {
                 System.out.println(o);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
