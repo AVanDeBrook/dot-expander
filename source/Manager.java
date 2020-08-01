@@ -7,9 +7,11 @@ public class Manager
 {
     public static void main(String[] args)
     {
-        DotLangParser parser = new DotLangParser(new DotFileEnumerator(args[0]));
         try {
+            DotLangParser parser = new DotLangParser(new DotFileEnumerator(args[0]));
             parser.parse();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Usage:java source.Manager [directory]");
         } catch (Exception e) {
             System.err.println(e);
             e.printStackTrace();

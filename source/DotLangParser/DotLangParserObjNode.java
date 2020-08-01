@@ -3,13 +3,13 @@ package source.DotLangParser;
 public class DotLangParserObjNode
 {
     private String nodeName;
-    private String attributeSubString;
+    private String attributeString;
     private String[] attributes;
 
     public DotLangParserObjNode()
     {
         nodeName = "";
-        attributeSubString = "";
+        attributeString = "";
     }
 
     /**************************************************************************/
@@ -23,7 +23,7 @@ public class DotLangParserObjNode
 
     public String getAttributeSubString()
     {
-        return attributeSubString;
+        return attributeString;
     }
 
     public String[] getAttributes()
@@ -36,9 +36,9 @@ public class DotLangParserObjNode
         this.nodeName = nodeName;
     }
 
-    public void setAttributeSubString(String attributeSubString)
+    public void setAttributeString(String attributeSubString)
     {
-        this.attributeSubString = attributeSubString;
+        this.attributeString = attributeSubString;
     }
 
     public void setAttributes(String[] attributes)
@@ -55,7 +55,7 @@ public class DotLangParserObjNode
     {
         String output = "";
 
-        output += attributeSubString + "\n";
+        output += attributeString + "\n";
 
         for (String s : attributes) {
             output += s + "\n";

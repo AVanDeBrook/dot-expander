@@ -7,6 +7,9 @@ public class DotFileEnumerator
 {
     private LinkedList<String> fileList = new LinkedList<String>();
 
+    /**
+     * @param filePath - string-based path to dot files.
+     */
     public DotFileEnumerator(String filePath)
     {
         String[] tempArr = new File(filePath).list();
@@ -16,6 +19,9 @@ public class DotFileEnumerator
         }
     }
 
+    /**
+     * @param filePath - File object-based file path.
+     */
     public DotFileEnumerator(File filePath)
     {
         String[] tempArr = filePath.list();
@@ -25,6 +31,10 @@ public class DotFileEnumerator
         }
     }
 
+    /**
+     * @param filePath - string-based path to dot files.
+     * @param filter - toggle file-filtering.
+     */
     public DotFileEnumerator(String filePath, boolean filter)
     {
         String[] tempArr = new File(filePath).list();
@@ -34,6 +44,10 @@ public class DotFileEnumerator
         }
     }
 
+    /**
+     * @param filePath - File object-based file path.
+     * @param filter - toggle file-filtering.
+     */
     public DotFileEnumerator(File filePath, boolean filter)
     {
         String[] tempArr = filePath.list();
@@ -43,6 +57,11 @@ public class DotFileEnumerator
         }
     }
 
+    /**
+     * Filter strings for "cgraph" phrase.
+     *
+     * @param arr - array of file-name strings.
+     */
     private void filterStrings(String[] arr)
     {
         for (String s : arr) {

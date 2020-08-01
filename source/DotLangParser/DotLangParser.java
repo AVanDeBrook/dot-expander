@@ -12,12 +12,23 @@ public class DotLangParser
     private LinkedList<String> fileList;
     private LinkedList<DotLangParserObj> parsedData;
 
+    /**
+     * Constructor. Requires a DotFileEnumerator object to get the list of files
+     * to parse.
+     *
+     * @param files - Object containing enumerated files
+     */
     public DotLangParser(DotFileEnumerator files)
     {
         fileList = files.getFileList();
         parsedData = new LinkedList<DotLangParserObj>();
     }
 
+    /**
+     *  Parses objects that were enumerated by the FileEnumerator.
+     *
+     * @throws Exception - When a file is not a ".dot" file.
+     */
     public void parse() throws Exception
     {
         if (checkFiles()) {
@@ -34,6 +45,10 @@ public class DotLangParser
         }
     }
 
+    /**
+     * Internal function called by parse() to read contents of files
+     * into data structures.
+     */
     private void readFiles()
     {
         DotLangParserObj tempData;
@@ -63,6 +78,12 @@ public class DotLangParser
         }
     }
 
+    /**
+     * Internal function called by parse on each data structure to parse the
+     * key, value pairs for each node.
+     *
+     * @param graphObject - Data structure of the individual file to parse.
+     */
     private void parseAttributes(DotLangParserObj graphObject)
     {
         String tempString;
@@ -78,7 +99,7 @@ public class DotLangParser
         for (String s : contents) {
             if (s.contains("label")) {
                 tempString = s.substring(s.indexOf("[") + 1, s.indexOf("]") - 1);
-                tempNode.setAttributeSubString(tempString);
+                tempNode.setAttributeString(tempString);
                 tempNode.setAttributes(tempString.split(","));
             }
         }
@@ -86,6 +107,11 @@ public class DotLangParser
         graphObject.getNodeList().add(tempNode);
     }
 
+    /**
+     * Checks passed file names for the ".dot" extension.
+     *
+     * @return - True when all files have correct extension. False otherwise.
+     */
     private boolean checkFiles()
     {
         boolean output = true;

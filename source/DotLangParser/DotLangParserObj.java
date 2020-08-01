@@ -5,11 +5,18 @@ import java.util.LinkedList;
 public class DotLangParserObj
 {
     public final String fileName;
+    public String graphName;
 
     private String contents;
     private LinkedList<DotLangParserObjNode> nodeList;
     private DotLangParserGraphType graphType;
 
+    /**
+     * File-name and content constructor.
+     *
+     * @param fileName - name of the file.
+     * @param contents - content of the file.
+     */
     public DotLangParserObj(String fileName, String contents)
     {
         this.fileName = fileName;
@@ -17,6 +24,11 @@ public class DotLangParserObj
         nodeList = new LinkedList<DotLangParserObjNode>();
     }
 
+    /**
+     * File-name constructor.
+     *
+     * @param fileName - name of the file.
+     */
     public DotLangParserObj(String fileName)
     {
         this.fileName = fileName;
