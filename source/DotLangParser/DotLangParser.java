@@ -28,21 +28,24 @@ public class DotLangParser
      *  Parses objects that were enumerated by the FileEnumerator.
      *
      * @throws Exception - When a file is not a ".dot" file.
+     * @return - List of graph objects.
      */
-    public void parse() throws Exception
+    public LinkedList<DotLangParserObj> parse() throws Exception
     {
         if (checkFiles()) {
             readFiles();
             for (DotLangParserObj dotObj : parsedData) {
                 parseAttributes(dotObj);
                 // Comment/Uncomment for debugging
-                for (DotLangParserObjNode n : dotObj.getNodeList()) {
-                    System.out.println(n.getAttributes()[0]);
-                }
+                // for (DotLangParserObjNode n : dotObj.getNodeList()) {
+                //     System.out.println(n.getAttributes()[0]);
+                // }
             }
         } else {
             throw new Exception("All files must have extension '.dot'");
         }
+
+        return parsedData;
     }
 
     /**
@@ -98,7 +101,7 @@ public class DotLangParser
 
         for (String s : contents) {
             if (s.contains("label")) {
-                tempString = s.substring(s.indexOf("[") + 1, s.indexOf("]") - 1);
+                tempString = s.substring(s.indexOf("[") + 1, s.indexOf("]"));
                 tempNode.setAttributeString(tempString);
                 tempNode.setAttributes(tempString.split(","));
             }
@@ -123,5 +126,29 @@ public class DotLangParser
         }
 
         return output;
+    }
+
+    /**************************************************************************/
+    /*************************** Acessor Functions ****************************/
+    /**************************************************************************/
+
+    public LinkedList<String> getFileList()
+    {
+        return fileList;
+    }
+
+    public LinkedList<DotLangParserObj> getParsedData()
+    {
+        return parsedData;
+    }
+
+    public void setFileList(LinkedList<String> fileList)
+    {
+        this.fileList = fileList;
+    }
+
+    public void setParsedData(LinkedList<DotLangParserObj> parsedData)
+    {
+        this.parsedData = parsedData;
     }
 }

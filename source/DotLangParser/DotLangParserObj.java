@@ -88,4 +88,16 @@ public class DotLangParserObj
     {
         this.graphType = graphType;
     }
+
+    @Override
+    public String toString()
+    {
+        String output = "";
+
+        for (DotLangParserObjNode n : nodeList) {
+            output += n.toString();
+        }
+
+        return output;
+    }
 }
