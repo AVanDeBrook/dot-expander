@@ -14,11 +14,16 @@ public class Manager
         try {
             parser = new DotGraphParser(new DotFileEnumerator(args[0]));
             list = parser.parse();
-            for (GraphContainer o : list) {
-                System.out.println(o);
+            for (GraphContainer container : list) {
+                System.out.println("\nFile Name: " + container.getFileName());
+                System.out.println("Graph Name: " + container.getGraphName());
+                for (GraphNodeContainer node : container.getNodeList()) {
+                    System.out.println(node.getNodeName());
+                }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             System.err.println("Usage:java source.Manager [directory]");
+            e.printStackTrace();
         } catch (Exception e) {
             System.err.println(e);
             e.printStackTrace();

@@ -49,18 +49,4 @@ public class GraphNodeContainer
 
         this.attributes = attributes;
     }
-
-    @Override
-    public String toString()
-    {
-        String output = "";
-
-        output += attributeString + "\n";
-
-        for (String s : attributes) {
-            output += s + "\n";
-        }
-
-        return output;
-    }
 }

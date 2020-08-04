@@ -18,31 +18,29 @@ public class DotGraphParser
      *
      * @param files - Object containing enumerated files
      */
-    public DotGraphParser(DotFileEnumerator files)
+    public DotGraphParser(DotFileEnumerator files) throws Exception
     {
         fileList = files.getFileList();
+
+        for (String file : fileList) {
+            if (!file.contains(".dot")) {
+                throw new Exception("Unexpected file passed.");
+            }
+        }
+
         parsedData = new LinkedList<GraphContainer>();
     }
 
     /**
-     *  Parses objects that were enumerated by the FileEnumerator.
+     * Parses objects that were enumerated by the FileEnumerator.
      *
-     * @throws Exception - When a file is not a ".dot" file.
      * @return - List of graph objects.
      */
-    public LinkedList<GraphContainer> parse() throws Exception
+    public LinkedList<GraphContainer> parse()
     {
-        if (checkFiles()) {
-            readFiles();
-            for (GraphContainer dotObj : parsedData) {
-                parseAttributes(dotObj);
-                // Comment/Uncomment for debugging
-                // for (DotLangParserObjNode n : dotObj.getNodeList()) {
-                //     System.out.println(n.getAttributes()[0]);
-                // }
-            }
-        } else {
-            throw new Exception("All files must have extension '.dot'");
+        readFiles();
+        for (GraphContainer dotObj : parsedData) {
+            parseAttributes(dotObj);
         }
 
         return parsedData;
@@ -72,60 +70,42 @@ public class DotGraphParser
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // Comment/Uncomment for debugging purposes
-            // for (DotLangParserObj o : parsedData) {
-            //     System.out.println(o.fileName);
-            //     System.out.println(o.getContents(true));
-            // }
         }
     }
 
     /**
-     * Internal function called by parse on each data structure to parse the
+     * Internal function called by parse() on each data structure to parse the
      * key, value pairs for each node.
      *
      * @param graphObject - Data structure of the individual file to parse.
      */
     private void parseAttributes(GraphContainer graphObject)
     {
-        String tempString;
         String[] contents = graphObject.getContents(false).split("%");
-        GraphNodeContainer tempNode = new GraphNodeContainer();
+
+        String tempString = contents[0].trim();
+        graphObject.setGraphName(tempString.substring(tempString.indexOf("\"") + 1, tempString.lastIndexOf("\"")));
 
         if (graphObject.getContents(false).contains("digraph")) {
-            graphObject.setGraphType(DotGraphType.DIGRAPH);
+            graphObject.setDirectedGraph(true);
         } else {
-            graphObject.setGraphType(DotGraphType.UDIGRAPH);
+            graphObject.setDirectedGraph(false);
         }
 
         for (String s : contents) {
-            if (s.contains("label")) {
+            if (s.contains("Node")) {
+                GraphNodeContainer tempNode = new GraphNodeContainer();
+
                 tempString = s.substring(s.indexOf("[") + 1, s.indexOf("]"));
                 tempNode.setAttributeString(tempString);
                 tempNode.setAttributes(tempString.split(","));
+
+                String nodeName = tempNode.getAttributes()[0];
+                tempNode.setNodeName(nodeName.split("=")[1]);
+
+                graphObject.getNodeList().add(tempNode);
             }
         }
-
-        graphObject.getNodeList().add(tempNode);
-    }
-
-    /**
-     * Checks passed file names for the ".dot" extension.
-     *
-     * @return - True when all files have correct extension. False otherwise.
-     */
-    private boolean checkFiles()
-    {
-        boolean output = true;
-
-        for (String s : fileList) {
-            if (!s.contains(".dot")) {
-                output = false;
-            }
-        }
-
-        return output;
     }
 
     /**************************************************************************/
