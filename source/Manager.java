@@ -9,23 +9,32 @@ public class Manager
 {
     public static void main(String[] args)
     {
-        DotGraphParser parser;
-        LinkedList<GraphContainer> list;
         try {
-            parser = new DotGraphParser(new DotFileEnumerator(args[0]));
-            list = parser.parse();
+            DotGraphParser parser = new DotGraphParser(new DotFileEnumerator(args[0]));
+            LinkedList<GraphContainer> list = parser.parse();
             for (GraphContainer container : list) {
                 System.out.println("\nFile Name: " + container.getFileName());
                 System.out.println("Graph Name: " + container.getGraphName());
                 for (GraphNodeContainer node : container.getNodeList()) {
-                    System.out.println(node.getNodeName());
+                    System.out.println("Node ID: " + node.getNodeID());
+                    System.out.println("Node name: " + node.getNodeName());
+                }
+                System.out.println("Connections:");
+                for (String s : container.getEdgeList()) {
+                    System.out.println(s);
+                }
+                System.out.println("Connections:");
+                for (GraphNodeContainer node : container.getNodeList()) {
+                    System.out.println("\n" + node.getNodeID() + ":");
+                    for (GraphNodeContainer s : node.getConnections()) {
+                        System.out.println("-" + s.getNodeID());
+                    }
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             System.err.println("Usage:java source.Manager [directory]");
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println(e);
             e.printStackTrace();
         }
     }

@@ -40,7 +40,9 @@ public class DotGraphParser
     {
         readFiles();
         for (GraphContainer dotObj : parsedData) {
+            parseConnections(dotObj);
             parseAttributes(dotObj);
+            setNodeConnections(dotObj);
         }
 
         return parsedData;
@@ -59,11 +61,8 @@ public class DotGraphParser
                 reader = new BufferedReader(new FileReader(file));
                 tempData = new GraphContainer(file);
 
-                while ((line = reader.readLine()) != null) {
-                    if (!line.contains("->")) {
-                        tempData.add(line);
-                    }
-                }
+                while ((line = reader.readLine()) != null)
+                    tempData.add(line);
 
                 parsedData.add(tempData);
                 reader.close();
@@ -93,8 +92,10 @@ public class DotGraphParser
         }
 
         for (String s : contents) {
-            if (s.contains("Node")) {
+            if (s.contains("Node") && !s.contains("->")) {
                 GraphNodeContainer tempNode = new GraphNodeContainer();
+
+                tempNode.setNodeID(s.substring(0, s.indexOf("[") - 1).trim());
 
                 tempString = s.substring(s.indexOf("[") + 1, s.indexOf("]"));
                 tempNode.setAttributeString(tempString);
@@ -105,6 +106,24 @@ public class DotGraphParser
 
                 graphObject.getNodeList().add(tempNode);
             }
+        }
+    }
+
+    private void parseConnections(GraphContainer graphObject)
+    {
+        for (String s : graphObject.getContents(false).split("%")) {
+            if (s.contains("->")) {
+                graphObject.getEdgeList().add(s.substring(0, s.indexOf("[")).trim());
+            }
+        }
+    }
+
+    private void setNodeConnections(GraphContainer graphObject)
+    {
+        for (String s : graphObject.getEdgeList()) {
+            String[] connectionString = s.split("->");
+            GraphNodeContainer sourceNode = graphObject.findNode(connectionString[0].trim());
+            sourceNode.getConnections().add(graphObject.findNode(connectionString[1].trim()));
         }
     }
 

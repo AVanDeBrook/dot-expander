@@ -1,15 +1,21 @@
 package source.DotGraphParser;
 
+import java.util.LinkedList;
+
 public class GraphNodeContainer
 {
     private String nodeName;
+    private String nodeID;
     private String attributeString;
     private String[] attributes;
+    private LinkedList<GraphNodeContainer> connections;
 
     public GraphNodeContainer()
     {
         nodeName = "";
+        nodeID = "";
         attributeString = "";
+        connections = new LinkedList<GraphNodeContainer>();
     }
 
     /**************************************************************************/
@@ -19,6 +25,11 @@ public class GraphNodeContainer
     public String getNodeName()
     {
         return nodeName;
+    }
+
+    public String getNodeID()
+    {
+        return nodeID;
     }
 
     public String getAttributeSubString()
@@ -31,9 +42,19 @@ public class GraphNodeContainer
         return attributes;
     }
 
+    public LinkedList<GraphNodeContainer> getConnections()
+    {
+        return connections;
+    }
+
     public void setNodeName(String nodeName)
     {
         this.nodeName = nodeName;
+    }
+
+    public void setNodeID(String nodeID)
+    {
+        this.nodeID = nodeID;
     }
 
     public void setAttributeString(String attributeSubString)
@@ -48,5 +69,10 @@ public class GraphNodeContainer
         }
 
         this.attributes = attributes;
+    }
+
+    public void setConnections(LinkedList<GraphNodeContainer> connections)
+    {
+        this.connections = connections;
     }
 }

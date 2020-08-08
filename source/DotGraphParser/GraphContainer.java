@@ -9,6 +9,7 @@ public class GraphContainer
 
     private String contents;
     private LinkedList<GraphNodeContainer> nodeList;
+    private LinkedList<String> edgeList;
     private boolean directedGraph;
 
     /**
@@ -22,6 +23,7 @@ public class GraphContainer
         this.fileName = fileName;
         this.contents = contents;
         nodeList = new LinkedList<GraphNodeContainer>();
+        edgeList = new LinkedList<String>();
     }
 
     /**
@@ -34,6 +36,7 @@ public class GraphContainer
         this.fileName = fileName;
         this.contents = "";
         nodeList = new LinkedList<GraphNodeContainer>();
+        edgeList = new LinkedList<String>();
     }
 
     /**
@@ -45,6 +48,16 @@ public class GraphContainer
     {
         contents += line + "%";
         contents.replaceAll(" ", "");
+    }
+
+    public GraphNodeContainer findNode(String nodeName)
+    {
+        for (GraphNodeContainer node : nodeList) {
+            if (node.getNodeID().equals(nodeName)) {
+                return node;
+            }
+        }
+        return null;
     }
 
     /**************************************************************************/
@@ -84,6 +97,11 @@ public class GraphContainer
         return nodeList;
     }
 
+    public LinkedList<String> getEdgeList()
+    {
+        return edgeList;
+    }
+
     public void setGraphName(String graphName)
     {
         this.graphName = graphName;
@@ -97,5 +115,10 @@ public class GraphContainer
     public void setDirectedGraph(boolean directedGraph)
     {
         this.directedGraph = directedGraph;
+    }
+
+    public void setEdgeList(LinkedList<String> edgeList)
+    {
+        this.edgeList = edgeList;
     }
 }
