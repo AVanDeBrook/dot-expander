@@ -5,11 +5,12 @@ import java.util.LinkedList;
 public class GraphContainer
 {
     public final String fileName;
-    private String graphName;
 
+    private String graphName;
     private String contents;
-    private LinkedList<GraphNodeContainer> nodeList;
-    private LinkedList<String> edgeList;
+    private String graphPrefix;
+    private LinkedList<GraphNodeContainer> nodeList = new LinkedList<GraphNodeContainer>();
+    private LinkedList<String> edgeList = new LinkedList<String>();
     private boolean directedGraph;
 
     /**
@@ -22,8 +23,7 @@ public class GraphContainer
     {
         this.fileName = fileName;
         this.contents = contents;
-        nodeList = new LinkedList<GraphNodeContainer>();
-        edgeList = new LinkedList<String>();
+        this.graphPrefix = "";
     }
 
     /**
@@ -35,8 +35,7 @@ public class GraphContainer
     {
         this.fileName = fileName;
         this.contents = "";
-        nodeList = new LinkedList<GraphNodeContainer>();
-        edgeList = new LinkedList<String>();
+        this.graphPrefix = "";
     }
 
     /**
@@ -87,6 +86,11 @@ public class GraphContainer
         return output;
     }
 
+    public String getGraphPrefix()
+    {
+        return graphPrefix;
+    }
+
     public boolean isDirectedGraph()
     {
         return directedGraph;
@@ -110,6 +114,11 @@ public class GraphContainer
     public void setContents(String contents)
     {
         this.contents = contents;
+    }
+
+    public void setGraphPrefix(String graphPrefix)
+    {
+        this.graphPrefix = graphPrefix;
     }
 
     public void setDirectedGraph(boolean directedGraph)

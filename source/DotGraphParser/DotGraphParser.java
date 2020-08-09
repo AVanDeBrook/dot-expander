@@ -1,7 +1,6 @@
 package source.DotGraphParser;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.LinkedList;
 
 import source.DotFileEnumerator.DotFileEnumerator;
@@ -10,7 +9,7 @@ public class DotGraphParser
 {
     private BufferedReader reader;
     private LinkedList<String> fileList;
-    private LinkedList<GraphContainer> parsedData;
+    private LinkedList<GraphContainer> parsedData = new LinkedList<GraphContainer>();
 
     /**
      * Constructor. Requires a DotFileEnumerator object to get the list of files
@@ -27,8 +26,6 @@ public class DotGraphParser
                 throw new Exception("Unexpected file passed.");
             }
         }
-
-        parsedData = new LinkedList<GraphContainer>();
     }
 
     /**
@@ -40,12 +37,39 @@ public class DotGraphParser
     {
         readFiles();
         for (GraphContainer dotObj : parsedData) {
-            parseConnections(dotObj);
             parseAttributes(dotObj);
-            setNodeConnections(dotObj);
+            parseConnections(dotObj);
+            parseNodeConnections(dotObj);
+            parsePrefixes(dotObj);
         }
 
         return parsedData;
+    }
+
+    /**
+     * Trims nodes from the graph if they are in the same module as the function
+     * that the graph is built from. In other words, if the prefix of the node(s)
+     * match the prefix of the graph it will be trimmed from the list of nodes.
+     *
+     * @param graphList - List of graphs to trim nodes from.
+     */
+    public void trimNodes(GraphContainer graph)
+    {
+        LinkedList<GraphNodeContainer> removalList = new LinkedList<GraphNodeContainer>();
+
+        // @FIXME: Does not remove all nodes w/ same module prefix, need to come
+        //         back to this later.
+        for (GraphNodeContainer node : graph.getNodeList()) {
+            if (node.getNodePrefix().equals(graph.getGraphPrefix())) {
+                if (!node.getNodeName().equals(graph.getGraphName())) {
+                    removalList.add(node);
+                }
+            }
+        }
+
+        for (GraphNodeContainer node : removalList) {
+            graph.getNodeList().remove(node);
+        }
     }
 
     /**
@@ -54,12 +78,11 @@ public class DotGraphParser
      */
     private void readFiles()
     {
-        GraphContainer tempData;
         String line;
         try {
             for (String file : fileList) {
                 reader = new BufferedReader(new FileReader(file));
-                tempData = new GraphContainer(file);
+                GraphContainer tempData = new GraphContainer(file);
 
                 while ((line = reader.readLine()) != null)
                     tempData.add(line);
@@ -101,14 +124,20 @@ public class DotGraphParser
                 tempNode.setAttributeString(tempString);
                 tempNode.setAttributes(tempString.split(","));
 
-                String nodeName = tempNode.getAttributes()[0];
-                tempNode.setNodeName(nodeName.split("=")[1]);
+                String nodeName = tempNode.getAttributes()[0].split("=")[1];
+                tempNode.setNodeName(nodeName.substring(1, nodeName.lastIndexOf("\"")));
 
                 graphObject.getNodeList().add(tempNode);
             }
         }
     }
 
+    /**
+     * Internal function called by parse. Adds edge definitions to a linked list
+     * in the graph container to be parsed and reduced later.
+     *
+     * @param graphObject - Graph to build connection list from.
+     */
     private void parseConnections(GraphContainer graphObject)
     {
         for (String s : graphObject.getContents(false).split("%")) {
@@ -118,12 +147,35 @@ public class DotGraphParser
         }
     }
 
-    private void setNodeConnections(GraphContainer graphObject)
+    /**
+     * Internal function called by parse. Creates a list of connections from one
+     * node to all other nodes, for all nodes in a graph.
+     *
+     * @param graphObject - Graph to build node connections from.
+     */
+    private void parseNodeConnections(GraphContainer graphObject)
     {
         for (String s : graphObject.getEdgeList()) {
             String[] connectionString = s.split("->");
             GraphNodeContainer sourceNode = graphObject.findNode(connectionString[0].trim());
             sourceNode.getConnections().add(graphObject.findNode(connectionString[1].trim()));
+        }
+    }
+
+    /**
+     * Internal function called by parse. Finds the prefix or module of the graph
+     * node by attempting to parse a prefix from the graphs and nodes provided.
+     *
+     * @param graphObject - Graph and nodes to parse name prefixes from.
+     */
+    private void parsePrefixes(GraphContainer graphObject)
+    {
+        String graphName = graphObject.getGraphName();
+        graphObject.setGraphPrefix(graphName.substring(0, graphName.indexOf("_")).trim());
+
+        for (GraphNodeContainer node : graphObject.getNodeList()) {
+            String nodeName = node.getNodeName();
+            node.setNodePrefix(nodeName.substring(0, nodeName.indexOf("_")).trim());
         }
     }
 

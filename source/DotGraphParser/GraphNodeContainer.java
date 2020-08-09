@@ -6,6 +6,7 @@ public class GraphNodeContainer
 {
     private String nodeName;
     private String nodeID;
+    private String nodePrefix;
     private String attributeString;
     private String[] attributes;
     private LinkedList<GraphNodeContainer> connections;
@@ -14,6 +15,7 @@ public class GraphNodeContainer
     {
         nodeName = "";
         nodeID = "";
+        nodePrefix = "";
         attributeString = "";
         connections = new LinkedList<GraphNodeContainer>();
     }
@@ -30,6 +32,11 @@ public class GraphNodeContainer
     public String getNodeID()
     {
         return nodeID;
+    }
+
+    public String getNodePrefix()
+    {
+        return nodePrefix;
     }
 
     public String getAttributeSubString()
@@ -55,6 +62,11 @@ public class GraphNodeContainer
     public void setNodeID(String nodeID)
     {
         this.nodeID = nodeID;
+    }
+
+    public void setNodePrefix(String nodePrefix)
+    {
+        this.nodePrefix = nodePrefix;
     }
 
     public void setAttributeString(String attributeSubString)
