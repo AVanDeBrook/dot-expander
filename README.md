@@ -6,3 +6,6 @@ This is a companion project to phxBMS.
 
 It reads the dot files created by the project's documentation and creates a representation of them in memory. 
 Then, it will rewrite the dot files in a format that makes it easier to tell which functions are interacting with each other, so we can hopefully minimize the use of global functions and other unnecessary variables/functions.
+
+# Useful Links/References
+https://www.graphviz.org/doc/info/lang.html
