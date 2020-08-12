@@ -1,1 +1,1 @@
-subgraph %subgraphName% { label="%subgraphLabel%"; %nodeDefinitions% }
+subgraph %subgraphName% {label="%subgraphLabel%";%nodeDefinitions%}

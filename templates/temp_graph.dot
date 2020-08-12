@@ -1,5 +1,1 @@
-%graphType% %graphName%
-{
-    %subgraph%
-    %nodeConnections%
-}
+%graphType% %graphName% {%subgraph% %nodeConnections%}
