@@ -1,7 +1,6 @@
 package source;
 
 import java.util.LinkedList;
-import java.io.*;
 
 import source.DotFileEnumerator.*;
 import source.DotGraphParser.*;
@@ -13,7 +12,7 @@ public class Manager
     {
         try {
             DotGraphParser parser = new DotGraphParser(new DotFileEnumerator(args[0]));
-            LinkedList<GraphContainer> list = parser.parse();
+            LinkedList<GraphContainer> list = parser.parse(true);
             DotFileWriter graphWriter = new DotFileWriter("digraph", "dot_expander_test");
 
             graphWriter.writeGraphToFile("out/graph.dot", list);

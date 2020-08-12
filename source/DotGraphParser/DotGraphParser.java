@@ -3,6 +3,8 @@ package source.DotGraphParser;
 import java.io.*;
 import java.util.LinkedList;
 
+import org.w3c.dom.NodeList;
+
 import source.DotFileEnumerator.DotFileEnumerator;
 
 public class DotGraphParser
@@ -33,14 +35,16 @@ public class DotGraphParser
      *
      * @return - List of graph objects.
      */
-    public LinkedList<GraphContainer> parse()
+    public LinkedList<GraphContainer> parse(boolean trimInternalNodes)
     {
         readFiles();
         for (GraphContainer dotObj : parsedData) {
             parseAttributes(dotObj);
+            parsePrefixes(dotObj);
+            if (trimInternalNodes)
+                trimNodes(dotObj);
             parseConnections(dotObj);
             parseNodeConnections(dotObj);
-            parsePrefixes(dotObj);
         }
 
         return parsedData;
@@ -57,19 +61,14 @@ public class DotGraphParser
     {
         LinkedList<GraphNodeContainer> removalList = new LinkedList<GraphNodeContainer>();
 
-        // @FIXME: Does not remove all nodes w/ same module prefix, need to come
-        //         back to this later.
         for (GraphNodeContainer node : graph.getNodeList()) {
-            if (node.getNodePrefix().equals(graph.getGraphPrefix())) {
-                if (!node.getNodeName().equals(graph.getGraphName())) {
+            if (!node.isRoot())
+                if (node.getNodePrefix().equals(graph.getGraphPrefix()))
                     removalList.add(node);
-                }
-            }
         }
 
-        for (GraphNodeContainer node : removalList) {
+        for (GraphNodeContainer node : removalList)
             graph.getNodeList().remove(node);
-        }
     }
 
     /**
@@ -127,6 +126,9 @@ public class DotGraphParser
                 String nodeName = tempNode.getAttributes()[0].split("=")[1];
                 tempNode.setNodeName(nodeName.substring(1, nodeName.lastIndexOf("\"")));
 
+                if (tempNode.getNodeName().equals(graphObject.getGraphName()))
+                    tempNode.setRoot(true);
+
                 graphObject.getNodeList().add(tempNode);
             }
         }
@@ -155,10 +157,16 @@ public class DotGraphParser
      */
     private void parseNodeConnections(GraphContainer graphObject)
     {
+        if (graphObject.getNodeList().size() == 1)
+            return;
+
         for (String s : graphObject.getEdgeList()) {
             String[] connectionString = s.split("->");
             GraphNodeContainer sourceNode = graphObject.findNode(connectionString[0].trim());
-            sourceNode.getConnections().add(graphObject.findNode(connectionString[1].trim()));
+            GraphNodeContainer destNode = graphObject.findNode(connectionString[1].trim());
+
+            if (sourceNode != null && destNode != null)
+                sourceNode.getConnections().add(destNode);
         }
     }
 
