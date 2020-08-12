@@ -55,7 +55,7 @@ public class DotGraphParser
      *
      * @param graphList - List of graphs to trim nodes from.
      */
-    public void trimNodes(GraphContainer graph)
+    private void trimNodes(GraphContainer graph)
     {
         LinkedList<GraphNodeContainer> removalList = new LinkedList<GraphNodeContainer>();
 
