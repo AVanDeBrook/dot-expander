@@ -3,8 +3,6 @@ package source.DotGraphParser;
 import java.io.*;
 import java.util.LinkedList;
 
-import org.w3c.dom.NodeList;
-
 import source.DotFileEnumerator.DotFileEnumerator;
 
 public class DotGraphParser
