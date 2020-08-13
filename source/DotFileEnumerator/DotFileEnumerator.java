@@ -1,6 +1,6 @@
 package source.DotFileEnumerator;
 
-import java.io.File;
+import java.io.*;
 import java.util.LinkedList;
 
 public class DotFileEnumerator
@@ -8,6 +8,9 @@ public class DotFileEnumerator
     private LinkedList<String> fileList = new LinkedList<String>();
 
     /**
+     * String based path to the collection of dot files.
+     * Meant to be used for a collection of files.
+     *
      * @param filePath - string-based path to dot files.
      */
     public DotFileEnumerator(String filePath)
@@ -20,41 +23,46 @@ public class DotFileEnumerator
     }
 
     /**
-     * @param filePath - File object-based file path.
+     * Meant for use with single files.
+     *
+     * @param filePath - File object-based file.
      */
-    public DotFileEnumerator(File filePath)
+    public DotFileEnumerator(File file)
     {
-        String[] tempArr = filePath.list();
-
-        for (String s : tempArr) {
-            fileList.add(filePath.toString() + "/" + s);
-        }
+        fileList.add(file.toString());
     }
 
     /**
+     * Meant to be used on a collection of files, lists files and adds them to
+     * the file list if they are call graphs (e.g. if they have 'cgraph in the
+     * file name')
+     *
      * @param filePath - string-based path to dot files.
      * @param filter - toggle file-filtering.
+     * @throws IOException when file is not a cgraph.
      */
     public DotFileEnumerator(String filePath, boolean filter)
     {
         String[] tempArr = new File(filePath).list();
 
-        if (filter) {
+        if (filter)
             filterStrings(tempArr);
-        }
     }
 
     /**
+     * Meant to be used on a single dot file. If the file is not a call graph
+     * (does not have 'cgraph' in file name) then it will throw an IOException
+     *
      * @param filePath - File object-based file path.
      * @param filter - toggle file-filtering.
+     * @throws IOExcpetion when file is not a cgraph.
      */
-    public DotFileEnumerator(File filePath, boolean filter)
+    public DotFileEnumerator(File file, boolean filter) throws IOException
     {
-        String[] tempArr = filePath.list();
-
-        if (filter) {
-            filterStrings(tempArr);
-        }
+        if (file.toString().contains("cgraph"))
+            fileList.add(file.toString());
+        else
+            throw new IOException("File is not a call graph. Does not contain \"cgraph\" in file name.");
     }
 
     /**
@@ -85,9 +93,7 @@ public class DotFileEnumerator
         }
     }
 
-    /**************************************************************************/
-    /*************************** Acessor Functions ****************************/
-    /**************************************************************************/
+    /********** Acessor Functions **********/
 
     public void setFileList(LinkedList<String> fileList)
     {
