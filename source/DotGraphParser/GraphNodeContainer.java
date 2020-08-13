@@ -10,6 +10,7 @@ public class GraphNodeContainer
     private String attributeString;
     private String[] attributes;
     private LinkedList<GraphNodeContainer> connections;
+    private boolean root;
 
     public GraphNodeContainer()
     {
@@ -54,6 +55,11 @@ public class GraphNodeContainer
         return connections;
     }
 
+    public boolean isRoot()
+    {
+        return root;
+    }
+
     public void setNodeName(String nodeName)
     {
         this.nodeName = nodeName;
@@ -86,5 +92,10 @@ public class GraphNodeContainer
     public void setConnections(LinkedList<GraphNodeContainer> connections)
     {
         this.connections = connections;
+    }
+
+    public void setRoot(boolean root)
+    {
+        this.root = root;
     }
 }
